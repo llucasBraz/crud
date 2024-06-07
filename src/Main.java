@@ -4,33 +4,33 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    static class Book {
+    static class Movie {
         String title;
-        String author;
+        String director;
 
-        public Book(String title, String author) {
+        public Movie(String title, String director) {
             this.title = title;
-            this.author = author;
+            this.director = director;
         }
 
         @Override
         public String toString() {
-            return "Índice: " + books.indexOf(this) + " | Livro: " + title + " | Autor: " + author;
+            return "Índice: " + movies.indexOf(this) + " | Filme: " + title + " | Diretor: " + director;
         }
     }
 
-    static List<Book> books = new ArrayList<>();
+    static List<Movie> movies = new ArrayList<>();
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        loadBooksFromFile();
+        loadMoviesFromFile();
 
         while (true) {
             System.out.println("Menu:");
-            System.out.println("1. Adicionar Livro");
-            System.out.println("2. Listar Livros");
-            System.out.println("3. Atualizar Livro");
-            System.out.println("4. Deletar Livro");
+            System.out.println("1. Adicionar Filme");
+            System.out.println("2. Listar Filmes");
+            System.out.println("3. Atualizar Filme");
+            System.out.println("4. Deletar Filme");
             System.out.println("5. Sair");
             System.out.print("Escolha uma opção: ");
 
@@ -39,57 +39,57 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    System.out.print("Digite o título do livro: ");
+                    System.out.print("Digite o título do filme: ");
                     String title = scanner.nextLine();
-                    System.out.print("Digite o autor do livro: ");
-                    String author = scanner.nextLine();
-                    books.add(new Book(title, author));
-                    saveBooksToFile();
-                    System.out.println("Livro adicionado com sucesso!");
+                    System.out.print("Digite o diretor do filme: ");
+                    String director = scanner.nextLine();
+                    movies.add(new Movie(title, director));
+                    saveMoviesToFile();
+                    System.out.println("Filme adicionado com sucesso!");
                     break;
                 case 2:
-                    if (books.isEmpty()) {
-                        System.out.println("Nenhum livro cadastrado.");
+                    if (movies.isEmpty()) {
+                        System.out.println("Nenhum filme cadastrado.");
                     } else {
-                        System.out.println("Lista de Livros:");
-                        for (Book book : books) {
-                            System.out.println(book);
+                        System.out.println("Lista de Filmes:");
+                        for (Movie movie : movies) {
+                            System.out.println(movie);
                         }
                     }
                     break;
                 case 3:
-                    if (books.isEmpty()) {
-                        System.out.println("Nenhum livro cadastrado para atualizar.");
+                    if (movies.isEmpty()) {
+                        System.out.println("Nenhum filme cadastrado para atualizar.");
                     } else {
-                        System.out.print("Digite o índice do livro que deseja atualizar: ");
+                        System.out.print("Digite o índice do filme que deseja atualizar: ");
                         int index = scanner.nextInt();
                         scanner.nextLine(); // Limpar o buffer
 
-                        if (index >= 0 && index < books.size()) {
-                            System.out.print("Digite o novo título do livro: ");
+                        if (index >= 0 && index < movies.size()) {
+                            System.out.print("Digite o novo título do filme: ");
                             String newTitle = scanner.nextLine();
-                            System.out.print("Digite o novo autor do livro: ");
-                            String newAuthor = scanner.nextLine();
-                            books.set(index, new Book(newTitle, newAuthor));
-                            saveBooksToFile();
-                            System.out.println("Livro atualizado com sucesso!");
+                            System.out.print("Digite o novo diretor do filme: ");
+                            String newDirector = scanner.nextLine();
+                            movies.set(index, new Movie(newTitle, newDirector));
+                            saveMoviesToFile();
+                            System.out.println("Filme atualizado com sucesso!");
                         } else {
                             System.out.println("Índice inválido.");
                         }
                     }
                     break;
                 case 4:
-                    if (books.isEmpty()) {
-                        System.out.println("Nenhum livro cadastrado para deletar.");
+                    if (movies.isEmpty()) {
+                        System.out.println("Nenhum filme cadastrado para deletar.");
                     } else {
-                        System.out.print("Digite o índice do livro que deseja deletar: ");
+                        System.out.print("Digite o índice do filme que deseja deletar: ");
                         int deleteIndex = scanner.nextInt();
                         scanner.nextLine(); // Limpar o buffer
 
-                        if (deleteIndex >= 0 && deleteIndex < books.size()) {
-                            books.remove(deleteIndex);
-                            saveBooksToFile();
-                            System.out.println("Livro deletado com sucesso!");
+                        if (deleteIndex >= 0 && deleteIndex < movies.size()) {
+                            movies.remove(deleteIndex);
+                            saveMoviesToFile();
+                            System.out.println("Filme deletado com sucesso!");
                         } else {
                             System.out.println("Índice inválido.");
                         }
@@ -105,27 +105,27 @@ public class Main {
         }
     }
 
-    private static void saveBooksToFile() {
-        try (PrintWriter writer = new PrintWriter("books.txt")) {
-            for (Book book : books) {
-                writer.println(book.title + "," + book.author);
+    private static void saveMoviesToFile() {
+        try (PrintWriter writer = new PrintWriter("movies.txt")) {
+            for (Movie movie : movies) {
+                writer.println(movie.title + "," + movie.director);
             }
         } catch (FileNotFoundException e) {
             System.out.println("Erro ao salvar no arquivo: " + e.getMessage());
         }
     }
 
-    private static void loadBooksFromFile() {
-        try (Scanner scanner = new Scanner(new File("books.txt"))) {
+    private static void loadMoviesFromFile() {
+        try (Scanner scanner = new Scanner(new File("movies.txt"))) {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 String[] parts = line.split(",");
                 if (parts.length == 2) {
-                    books.add(new Book(parts[0], parts[1]));
+                    movies.add(new Movie(parts[0], parts[1]));
                 }
             }
         } catch (FileNotFoundException e) {
-            System.out.println("Arquivo de livros não encontrado. Será criado um novo.");
+            System.out.println("Arquivo de filmes não encontrado. Será criado um novo.");
         }
     }
 }
